@@ -11,6 +11,8 @@ class PayItem extends Model
 {
     use HasFactory;
 
+    public const USD_CONVERSION_VALUE = 100;
+
     protected $fillable = [
         'amount',
         'hours_worked',
@@ -34,16 +36,26 @@ class PayItem extends Model
     protected function amount(): Attribute
     {
         return Attribute::make(
-            get: fn ($value) => $value / 100,
-            set: fn ($value) => $value * 100,
+            get: fn ($value) => $this->toUsd($value),
+            set: fn ($value) => $this->toCent($value),
         );
     }
 
     protected function payRate(): Attribute
     {
         return Attribute::make(
-            get: fn ($value) => $value / 100,
-            set: fn ($value) => $value * 100,
+            get: fn ($value) => $this->toUsd($value),
+            set: fn ($value) => $this->toCent($value),
         );
+    }
+
+    private function toCent(int $value): int
+    {
+        return $value * self::USD_CONVERSION_VALUE;
+    }
+
+    private function toUsd(int $value): int
+    {
+        return $value / self::USD_CONVERSION_VALUE;
     }
 }

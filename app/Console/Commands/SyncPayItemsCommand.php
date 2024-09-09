@@ -13,7 +13,7 @@ class SyncPayItemsCommand extends Command
      *
      * @var string
      */
-    protected $signature = 'app:sync-pay-items {businessId} : The ID of the business to process pay items for}';
+    protected $signature = 'app:sync-pay-items {businessId}';
 
     /**
      * The console command description.
@@ -31,8 +31,7 @@ class SyncPayItemsCommand extends Command
         $business = Business::find($businessId);
 
         if (!$business) {
-            $this->error("Business with ID $businessId not found.");
-            return 1; 
+            $this->fail("Business with ID $businessId not found.");
         }
 
         

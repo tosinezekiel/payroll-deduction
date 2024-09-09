@@ -1,8 +1,7 @@
 <?php
 
-namespace Tests\Unit;
+namespace Tests\Feature\Jobs;
 
-use Mockery;
 use Tests\TestCase;
 use App\Models\User;
 use App\Models\Business;
@@ -85,7 +84,7 @@ class SyncPayItemTest extends TestCase
 
         $service = new PayItemService();
         
-        $service->processPayItems($fakeResponse['payItems'], $business);
+        $service->processItems($fakeResponse['payItems'], $business);
 
         $this->assertDatabaseHas('pay_items', [
             'external_id' => $payItemSampleEmployeeID['id'],

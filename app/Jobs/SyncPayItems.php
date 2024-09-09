@@ -46,7 +46,7 @@ class SyncPayItems implements ShouldQueue
             match ($response->status()) {
                 Response::HTTP_UNAUTHORIZED => Log::alert('Unauthorized access to external API'),
                 Response::HTTP_NOT_FOUND => Log::critical('No business found for provided external ID'),
-                Response::HTTP_OK => $this->payItemService->processPayItems($response->json(), $this->business),
+                Response::HTTP_OK => $this->payItemService->processItems($response->json(), $this->business),
                 default => Log::error('Something went wrong: ' . $response->status())
             };
 
@@ -61,7 +61,7 @@ class SyncPayItems implements ShouldQueue
             
         } while (!$this->end);
 
-        if (isset($this->end)) {
+        if ($this->end) {
             $this->payItemService->removeStaleEntries($data['payItems'], $this->business);
         }
     }
