@@ -5,6 +5,7 @@ namespace App\Console\Commands;
 use App\Models\Business;
 use App\Jobs\SyncPayItems;
 use Illuminate\Console\Command;
+use App\Services\PayItemService;
 
 class SyncPayItemsCommand extends Command
 {
@@ -31,11 +32,12 @@ class SyncPayItemsCommand extends Command
         $business = Business::find($businessId);
 
         if (!$business) {
-            $this->fail("Business with ID $businessId not found.");
+            $this->error("Business with ID $businessId not found.");
+            return 1; 
         }
 
-        
-        SyncPayItems::dispatch($business); 
+        $payItemService = resolve(PayItemService::class);
+        SyncPayItems::dispatch($business, $payItemService); 
 
         $this->info("Job dispatched successfully for business ID: $businessId");
 

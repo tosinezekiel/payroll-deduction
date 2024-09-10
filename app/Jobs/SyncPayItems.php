@@ -23,7 +23,7 @@ class SyncPayItems implements ShouldQueue
      * Create a new job instance.
      */
     public function __construct(
-        protected Business $business,
+        private Business $business,
         private PayItemService $payItemService,
         private int $page = 1,
         private bool $end = false
@@ -64,5 +64,11 @@ class SyncPayItems implements ShouldQueue
         if ($this->end) {
             $this->payItemService->removeStaleEntries($data['payItems'], $this->business);
         }
+    }
+
+
+    public function getBusiness(): Business
+    {
+        return $this->business;
     }
 }
