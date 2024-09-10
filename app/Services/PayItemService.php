@@ -12,7 +12,7 @@ use Illuminate\Support\Facades\Log;
 
 class PayItemService
 {
-    public function processItems(array $payItems, Business $business)
+    public function processItems(array $payItems, Business $business): void
     {
         DB::beginTransaction();
         try {
@@ -40,7 +40,7 @@ class PayItemService
         }
     }
 
-    public function removeStaleEntries(array $payItems, Business $business)
+    public function removeStaleEntries(array $payItems, Business $business): void
     {
         $existingIds = collect($payItems)->pluck('id');
         PayItem::where('business_id', $business->id)

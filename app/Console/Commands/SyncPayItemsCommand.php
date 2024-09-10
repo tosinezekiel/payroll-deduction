@@ -23,10 +23,7 @@ class SyncPayItemsCommand extends Command
      */
     protected $description = 'Processes pay items for a specific business';
 
-    /**
-     * Execute the console command.
-     */
-    public function handle()
+    public function handle(): int
     {
         $businessId = $this->argument('businessId');
         $business = Business::find($businessId);

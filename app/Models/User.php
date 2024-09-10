@@ -4,6 +4,7 @@ namespace App\Models;
 
 // use Illuminate\Contracts\Auth\MustVerifyEmail;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
+use Illuminate\Database\Eloquent\Relations\BelongsToMany;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
 
@@ -45,7 +46,7 @@ class User extends Authenticatable
         ];
     }
 
-    public function businesses()
+    public function businesses(): BelongsToMany
     {
         return $this->belongsToMany(Business::class)->withPivot('external_id')->using(BusinessUser::class);
     }

@@ -17,8 +17,6 @@ class SyncPayItems implements ShouldQueue
 {
     use Dispatchable, InteractsWithQueue, Queueable, SerializesModels;
 
-    private const API_BASE_URL = 'https://some-partner-website.com/';
-
     /**
      * Create a new job instance.
      */
@@ -35,13 +33,14 @@ class SyncPayItems implements ShouldQueue
      */
     public function handle(): void
     {
+        $apiBaseUrl = config('services.clair.api_base_url');
         $clairApiKey = config('services.clair.api_key');
         $path = 'clair-pay-item-sync/';
 
         do {
             $response = Http::withHeaders([
                 'x-api-key' => $clairApiKey
-            ])->get(self::API_BASE_URL . "{$path}{$this->business->external_id}?page={$this->page}");
+            ])->get("{$apiBaseUrl}{$path}{$this->business->external_id}?page={$this->page}");
 
             match ($response->status()) {
                 Response::HTTP_UNAUTHORIZED => Log::alert('Unauthorized access to external API'),

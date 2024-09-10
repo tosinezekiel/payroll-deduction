@@ -29,5 +29,6 @@ Follow these instructions to set up the project on your local machine for develo
    cp .env.example .env
    php artisan key:generate
    php artisan test
-   php artisan serve
-   ``
+   php artisan migrate --seed
+   php artisan app:sync-pay-items {businessId}
+   ```

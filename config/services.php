@@ -37,6 +37,7 @@ return [
 
     'clair' => [
         'api_key' => env('CLAIR_API_KEY'),
+        'api_base_url' => env('API_BASE_URL')
     ],
 
 ];
