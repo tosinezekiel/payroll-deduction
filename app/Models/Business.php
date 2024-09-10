@@ -25,7 +25,8 @@ class Business extends Model
     protected function deductionPercentage(): Attribute
     {
         return Attribute::make(
-            get: fn ($value) => is_null($value) ?? 30
+            set: fn ($value) => $value === null ? 30 : $value,
+            get: fn ($value) => $value === null ? 30 : $value
         );
     }
 }

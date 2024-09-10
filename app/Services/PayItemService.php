@@ -17,21 +17,21 @@ class PayItemService
         DB::beginTransaction();
         try {
             foreach ($payItems as $item) {
-                $item = new PayItemDTO($item);
+                $itemDTO = new PayItemDTO($item);
 
-                $businessUser = BusinessUser::where('external_id', $item->employeeId)->first();
+                $businessUser = BusinessUser::where('external_id', $itemDTO->employeeId)->first();
 
                 if (!$businessUser) {
-                    Log::warning("No business user found with external ID: " . $item->employeeId);
+                    Log::warning("No business user found with external ID: " . $itemDTO->employeeId);
                     continue;
                 }
 
                 $user = $businessUser->user;
 
                 $deductionPercentage = $business->deduction_percentage;
-                $amount = $this->calculateAmount($item->hoursWorked, $item->payRate, $deductionPercentage);
+                $amount = $this->calculateAmount($itemDTO->hoursWorked, $itemDTO->payRate, $deductionPercentage);
 
-                $this->createOrUpdatePayItem($item, $user, $business, $amount);
+                $this->createOrUpdatePayItem($itemDTO, $user, $business, $amount);
             }
             DB::commit();
         } catch (\Exception $e) {
@@ -57,19 +57,17 @@ class PayItemService
         return (int) $amountInCents;
     }
 
-    private function createOrUpdatePayItem(PayItemDTO $item, User $user, Business $business, int $amount): void
+    private function createOrUpdatePayItem(PayItemDTO $itemDTO, User $user, Business $business, int $amount): void
     {
-        $pi = PayItem::updateOrCreate([
-            'external_id' => $item->externalId,
+        PayItem::updateOrCreate([
+            'external_id' => $itemDTO->externalId,
             'user_id' => $user->id,
             'business_id' => $business->id,
         ], [
-            'hours_worked' => $item->hoursWorked,
-            'pay_rate' => $item->payRate,
-            'date' => $item->date,
+            'hours_worked' => $itemDTO->hoursWorked,
+            'pay_rate' => $itemDTO->payRate,
+            'date' => $itemDTO->date,
             'amount' => $amount,
         ]);
-
-        dd($pi);
     }
 }

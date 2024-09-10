@@ -30,6 +30,6 @@ class PayItemServiceTest extends TestCase
     public function testCalculateAmount($hoursWorked, $payRate, $deductionPercentage, $expectedAmount): void
     {
         $result = $this->payItemService->calculateAmount($hoursWorked, $payRate, $deductionPercentage);
-        $this->assertEquals($expectedAmount, round($result / 100, 2));
+        $this->assertEquals($expectedAmount, to_usd($result));
     }
 }
